@@ -51,19 +51,48 @@ public class RouteController {
         train.getActor().setVisible(true);
     }
 
+    public void begin2(Train train) {
+        this.train = train;
+        isRouting = true;
+        positions = new ArrayList<IPositionable>();
+        /*String previousStationName = train.getHistory().get(train.getHistory().size()-1).getFirst();
+        Station previousStation = context.getGameLogic().getMap().getStationByName(previousStationName);
+        positions.add(previousStation.getLocation());*/
+        context.getGameLogic().setState(GameState.ROUTING);
+        addRoutingButtons();
+
+        TrainController trainController = new TrainController(context);
+        trainController.setTrainsVisible(train, false);
+        train.getActor().setVisible(true);
+    }
+
     private void addStationToRoute(Station station) {
         // the latest position chosen in the positions so far
-        IPositionable lastPosition =  positions.get(positions.size() - 1);
-        Station lastStation = context.getGameLogic().getMap().getStationFromPosition(lastPosition);
-
-        boolean hasConnection = context.getGameLogic().getMap().doesConnectionExist(station.getName(), lastStation.getName());
-        //Check whether a connection exists
-        if(!hasConnection) {
-            context.getTopBarController().displayFlashMessage("This connection doesn't exist", Color.RED);
-        } else {
-            positions.add(station.getLocation());
-            canEndRouting = !(station instanceof CollisionStation);
+        IPositionable lastPosition = null;
+        int proceed = 0;
+        try{
+            lastPosition =  positions.get(positions.size() - 1);
+            proceed = 1;
         }
+        catch(Exception e){}
+        if (proceed==1) {
+
+            Station lastStation = context.getGameLogic().getMap().getStationFromPosition(lastPosition);
+
+            boolean hasConnection = context.getGameLogic().getMap().doesConnectionExist(station.getName(), lastStation.getName());
+            //Check whether a connection exists
+            if (!hasConnection) {
+                context.getTopBarController().displayFlashMessage("This connection doesn't exist", Color.RED);
+            } else {
+                positions.add(station.getLocation());
+                canEndRouting = !(station instanceof CollisionStation);
+            }
+
+        }
+        if (positions.size() == 0) {
+            positions.add(station.getLocation());
+        }
+        return;
     }
 
     private void addRoutingButtons() {

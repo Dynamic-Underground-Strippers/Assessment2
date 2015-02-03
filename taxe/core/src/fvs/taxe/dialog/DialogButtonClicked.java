@@ -70,6 +70,8 @@ public class DialogButtonClicked implements ResourceDialogClickListener {
                 context.getRouteController().begin(train);
 
                 break;
+            case TRAIN_CHANGE_ROUTE:
+                context.getRouteController().begin2(train);
         }
     }
 }
