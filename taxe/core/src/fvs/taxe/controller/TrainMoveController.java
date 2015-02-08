@@ -100,6 +100,8 @@ public class TrainMoveController {
 
     private void collisions(Station station) {
         //test for train collisions at Junction point
+
+
         //TODO: ADD BETTER COLLISIONS HERE
         if(!(station instanceof CollisionStation)) {
             return;
