@@ -250,9 +250,6 @@ public class StationController {
 
 		// draw an icon on connections that are blocked, showing how many turns remain until they
 		// become unblocked
-		// if the game is in routing mode, then all connections that aren't blocked have a
-		// translucent black circle drawn on their midpoint, to increase visibility of the white
-		// text that will be drawn on top showing the length of the connection
 		for (Connection connection : connections) {
 			IPositionable midpoint = connection.getMidpoint();
 			if (connection.isBlocked()) {
@@ -260,8 +257,6 @@ public class StationController {
 				game.batch.draw(blockageTextures[connection.getTurnsBlocked() - 1],
 						midpoint.getX() - 16, midpoint.getY() - 16, 32, 32);
 				game.batch.end();
-			} else if (Game.getInstance().getState() == GameState.ROUTING) {
-				game.shapeRenderer.circle(midpoint.getX(), midpoint.getY(), 15);
 			}
 		}
 		game.shapeRenderer.end();
@@ -281,7 +276,7 @@ public class StationController {
 			} else if (Game.getInstance().getState() == GameState.ROUTING) {
 				IPositionable midpoint = connection.getMidpoint();
 				game.batch.begin();
-				game.fontTiny.setColor(Color.WHITE);
+				game.fontTiny.setColor(Color.BLACK);
 				String text = String.valueOf(Math.round(
 						Vector2.dst(connection.getStation1().getLocation().getX(),
 								connection.getStation1().getLocation().getY(),
